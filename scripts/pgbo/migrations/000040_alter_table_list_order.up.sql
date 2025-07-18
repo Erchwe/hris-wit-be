@@ -1,0 +1,1 @@
+ALTER TABLE lists ADD COLUMN list_order BIGINT DEFAULT 0;

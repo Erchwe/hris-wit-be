@@ -1,0 +1,21 @@
+CREATE SEQUENCE IF NOT EXISTS id_seq_for_tasks
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    CACHE 1;
+
+ALTER TABLE tasks
+    ALTER COLUMN id SET DEFAULT nextval('id_seq_for_tasks');
+
+CREATE SEQUENCE IF NOT EXISTS tasks_id_seq
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    CACHE 1;
+
+ALTER TABLE tasks
+    ALTER COLUMN task_id SET DEFAULT 'LI-' || LPAD(nextval('tasks_id_seq')::TEXT, 3, '0');
+
+

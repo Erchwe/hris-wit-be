@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS offices;
+DROP SEQUENCE IF EXISTS offices_id_seq;

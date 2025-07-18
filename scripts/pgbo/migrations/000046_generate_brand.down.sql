@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS brand;
+DROP SEQUENCE IF EXISTS brand_id_seq;

@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS data_pegawai CASCADE;
+DROP SEQUENCE IF EXISTS data_pegawai_id_seq;

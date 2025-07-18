@@ -1,0 +1,14 @@
+DROP SEQUENCE IF EXISTS id_seq_for_client;
+
+ALTER TABLE client
+    ALTER COLUMN id DROP DEFAULT;
+
+DROP SEQUENCE IF EXISTS id_seq_for_project;
+
+ALTER TABLE projects
+    ALTER COLUMN id DROP DEFAULT;
+
+DROP SEQUENCE IF EXISTS id_seq_for_list;
+
+ALTER TABLE lists
+    ALTER COLUMN id DROP DEFAULT;

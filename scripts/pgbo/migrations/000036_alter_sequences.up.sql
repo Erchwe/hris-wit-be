@@ -1,0 +1,29 @@
+CREATE SEQUENCE IF NOT EXISTS id_seq_for_client
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    CACHE 1;
+
+ALTER TABLE client
+    ALTER COLUMN id SET DEFAULT nextval('id_seq_for_client');
+
+CREATE SEQUENCE IF NOT EXISTS id_seq_for_project
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    CACHE 1;
+
+ALTER TABLE projects
+    ALTER COLUMN id SET DEFAULT nextval('id_seq_for_project');
+
+CREATE SEQUENCE IF NOT EXISTS id_seq_for_list
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    CACHE 1;
+
+ALTER TABLE lists
+    ALTER COLUMN id SET DEFAULT nextval('id_seq_for_list');

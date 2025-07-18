@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS pegawai_pendidikan_non_formal;
+DROP SEQUENCE IF EXISTS pegawai_pendidikan_non_formal_id_seq;

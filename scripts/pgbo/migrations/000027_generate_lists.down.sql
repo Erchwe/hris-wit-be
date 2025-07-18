@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS lists;
+DROP SEQUENCE IF EXISTS list_id_seq;

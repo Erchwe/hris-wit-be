@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS pelamar_pendidikan_non_formal;
+DROP SEQUENCE IF EXISTS pelamar_pendidikan_non_formal_id_seq;

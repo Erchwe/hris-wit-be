@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS ruangan;
+DROP SEQUENCE IF EXISTS ruangan_id_seq;

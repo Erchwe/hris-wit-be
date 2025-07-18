@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS kategori;
+DROP SEQUENCE IF EXISTS kategori_id_seq

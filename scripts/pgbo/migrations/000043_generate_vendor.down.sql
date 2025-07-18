@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS vendor;
+DROP SEQUENCE IF EXISTS vendor_id_seq
