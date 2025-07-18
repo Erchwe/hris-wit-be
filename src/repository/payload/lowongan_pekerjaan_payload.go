@@ -87,7 +87,8 @@ func (payload *InsertLowonganPekerjaanPayload) ToEntity(cfg config.KVStore) (dat
 		return data, errors.Wrapf(httpservice.ErrBadRequest, "invalid tgl_tutup_lowongan format")
 	}
 
-	linkLowongan := fmt.Sprintf("http://localhost:5173/pelamarForm?id=%s", userId)
+	frontendURL := cfg.GetString("frontend.base_url")
+	linkLowongan := fmt.Sprintf("%s/pelamarForm?id=%s", frontendURL, userId)
 
 	data = sqlc.CreateLowonganPekerjaanParams{
 		IDLowonganPekerjaan: userId,
