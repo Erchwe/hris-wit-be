@@ -1,71 +1,73 @@
 package main
 
 import (
-	"github.com/wit-id/blueprint-backend-go/src/client/application"
+	"fmt"
+	"os"
+	"strings"
 	"time"
 
+	// --- Impor dari blueprint Anda ---
 	"github.com/wit-id/blueprint-backend-go/common/echohttp"
 	"github.com/wit-id/blueprint-backend-go/common/httpservice"
 	"github.com/wit-id/blueprint-backend-go/toolkit/db/postgres"
 	"github.com/wit-id/blueprint-backend-go/toolkit/log"
 	"github.com/wit-id/blueprint-backend-go/toolkit/runtimekit"
 
-	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
+	// --- Impor library eksternal ---
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"
 )
 
 func main() {
 	var err error
+	var loggerIsSet bool // <-- PERUBAHAN 1: Tambahkan flag
 
 	setDefaultTimezone()
 
 	appContext, cancel := runtimekit.NewRuntimeContext()
 	defer func() {
 		cancel()
-
 		if err != nil {
-			log.FromCtx(appContext).Error(err, "found error")
+			// ================== PERUBAHAN 2 ==================
+			// Periksa flag, bukan log.Get()
+			if loggerIsSet {
+				log.FromCtx(appContext).Error(err, "found error")
+			} else {
+				fmt.Printf("found error before logger was initialized: %v\n", err)
+			}
+			// ===============================================
 		}
 	}()
 
-	// Set config file (env)
-	appConfig, err := envConfigVariable("config.yaml")
+	// Membaca konfigurasi dari Environment Variables, bukan file.
+	appConfig, err := envConfigVariable()
 	if err != nil {
 		return
 	}
 
-	// setup db
 	mainDB, err := postgres.NewFromConfig(appConfig, "db")
 	if err != nil {
 		return
 	}
 
-	// setup logging
+	// Logger baru diinisialisasi di sini
 	logger, err := log.NewFromConfig(appConfig, "log")
 	if err != nil {
 		return
 	}
-
 	logger.Set()
+	loggerIsSet = true // <-- PERUBAHAN 3: Atur flag setelah logger siap
 
-	// setup service
 	svc := httpservice.NewService(mainDB, appConfig)
 
-	// Buat instance Echo
-	e := echo.New()
+	// Menyesuaikan port untuk Render sebelum memanggil echohttp.
+	port := os.Getenv("PORT")
+	if port != "" {
+		appConfig.Set("restapi.port", port)
+		log.FromCtx(appContext).Info(fmt.Sprintf("Overriding restapi.port with environment PORT: %s", port))
+	}
 
-	application.AddRouteClient(svc, appConfig, e)
-	// CORS Default (mengizinkan semua origin selama development)
-
-	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins: []string{"http://localhost:5123"},
-		AllowMethods: []string{echo.GET, echo.POST, echo.PUT, echo.DELETE},
-		AllowHeaders: []string{"Origin", "Content-Type", "Authorization"},
-	}))
-
-	// Jalankan HTTP Service
+	// Jalankan HTTP Service menggunakan fungsi terpusat dari echohttp.
 	echohttp.RunEchoHTTPService(appContext, svc, appConfig)
 }
 
@@ -74,17 +76,21 @@ func setDefaultTimezone() {
 	if err != nil {
 		loc = time.Now().Location()
 	}
-
 	time.Local = loc
 }
 
-func envConfigVariable(filePath string) (cfg *viper.Viper, err error) {
+func envConfigVariable() (cfg *viper.Viper, err error) {
 	cfg = viper.New()
-	cfg.SetConfigFile(filePath)
+	cfg.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+	cfg.AutomaticEnv()
 
-	if err = cfg.ReadInConfig(); err != nil {
-		err = errors.Wrap(err, "Error while reading config file")
+	cfg.SetConfigFile("config.yaml")
+	if readErr := cfg.ReadInConfig(); readErr != nil {
+		// Menghapus panggilan log di sini karena logger belum diinisialisasi.
+	}
 
+	if os.Getenv("DATABASE_URL") == "" && os.Getenv("DB_HOST") == "" {
+		err = errors.New("FATAL: database configuration not found in environment variables")
 		return
 	}
 
