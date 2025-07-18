@@ -58,7 +58,7 @@ func RunEchoHTTPService(ctx context.Context, s *httpservice.Service, cfg config.
 		AllowOrigins:     []string{"https://hris-wit-fe.vercel.app"}, // <--- UBAH INI
 		AllowCredentials: true,
 		AllowMethods:     []string{http.MethodGet, http.MethodHead, http.MethodPut, http.MethodPatch, http.MethodPost, http.MethodDelete, http.MethodOptions},
-		AllowHeaders:     []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept, constants.DefaultAllowHeaderToken, constants.DefaultAllowHeaderRefreshToken},
+		AllowHeaders:     []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept, "Authorization", constants.DefaultAllowHeaderToken, constants.DefaultAllowHeaderRefreshToken},
 	}))
 	log.Println("DEBUG: CORS middleware configured.") // <-- Log 3
 
