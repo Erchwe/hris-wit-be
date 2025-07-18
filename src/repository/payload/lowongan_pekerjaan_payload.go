@@ -88,7 +88,7 @@ func (payload *InsertLowonganPekerjaanPayload) ToEntity(cfg config.KVStore) (dat
 	}
 
 	frontendURL := cfg.GetString("frontend.base_url")
-	linkLowongan := fmt.Sprintf(frontendURL, "%s/pelamarForm?id=%s", userId)
+	linkLowongan := fmt.Sprintf("%s/pelamarForm?id=%s", frontendURL, userId)
 
 	data = sqlc.CreateLowonganPekerjaanParams{
 		IDLowonganPekerjaan: userId,
