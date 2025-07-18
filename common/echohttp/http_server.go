@@ -55,7 +55,7 @@ func RunEchoHTTPService(ctx context.Context, s *httpservice.Service, cfg config.
 	log.Println("DEBUG: Echo instance created, setting up CORS middleware.") // <-- Log 2
 
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins:     []string{"https://hris-wit-chernojovs-projects.vercel.app"}, // <--- UBAH INI
+		AllowOrigins:     []string{"https://hris-wit-fe.vercel.app"}, // <--- UBAH INI
 		AllowCredentials: true,
 		AllowMethods:     []string{http.MethodGet, http.MethodHead, http.MethodPut, http.MethodPatch, http.MethodPost, http.MethodDelete, http.MethodOptions},
 		AllowHeaders:     []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept, constants.DefaultAllowHeaderToken, constants.DefaultAllowHeaderRefreshToken},
