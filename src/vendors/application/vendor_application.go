@@ -46,6 +46,7 @@ func insertVendor(svc *service.VendorService) echo.HandlerFunc {
 
 func getListVendor(svc *service.VendorService) echo.HandlerFunc {
 	return func(ctx echo.Context) error {
+		log.FromCtx(ctx.Request().Context()).Info("GET /vendor route triggered")
 		result, err := svc.GetListVendors(ctx.Request().Context())
 		if err != nil {
 			return err
